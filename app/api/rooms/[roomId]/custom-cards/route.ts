@@ -19,12 +19,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ roomId:
   const { userId, type, text, blanks } = await req.json()
   const supabase = await createServerSupabaseClient()
 
-  const { data: room } = await supabase
+  const { data: rooms } = await supabase
     .from('rooms')
     .select('*')
     .eq('id', roomId)
-    .single()
 
+  const room = rooms?.[0]
 
   if (!room || room.host_id !== userId) {
     return NextResponse.json({ error: 'Pouze host může přidávat karty' }, { status: 403 })
@@ -60,11 +60,12 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ roomI
   const { userId, cardId } = await req.json()
   const supabase = await createServerSupabaseClient()
 
-  const { data: room } = await supabase
+  const { data: rooms } = await supabase
     .from('rooms')
     .select('*')
     .eq('id', roomId)
-    .single()
+
+  const room = rooms?.[0]
 
   if (!room || room.host_id !== userId) {
     return NextResponse.json({ error: 'Pouze host může mazat karty' }, { status: 403 })
