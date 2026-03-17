@@ -24,7 +24,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ roomId:
     .select('*')
     .eq('id', roomId)
 
-  const room = rooms?.[0]
+  const room = rooms?.[0] as any
 
   if (!room || room.host_id !== userId) {
     return NextResponse.json({ error: 'Pouze host může přidávat karty' }, { status: 403 })
@@ -65,7 +65,7 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ roomI
     .select('*')
     .eq('id', roomId)
 
-  const room = rooms?.[0]
+  const room = rooms?.[0] as any
 
   if (!room || room.host_id !== userId) {
     return NextResponse.json({ error: 'Pouze host může mazat karty' }, { status: 403 })
